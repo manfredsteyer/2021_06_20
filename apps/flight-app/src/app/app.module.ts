@@ -26,7 +26,11 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 
     FlightLibModule.forRoot(),
     SharedModule.forRoot(),
-    RouterModule.forRoot(APP_ROUTES),
+    RouterModule.forRoot(APP_ROUTES, {
+      // errorHandler: (err) => {
+
+      // }
+    }),
   ],
   declarations: [
     AppComponent,

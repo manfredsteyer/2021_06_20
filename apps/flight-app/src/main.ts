@@ -1,17 +1,15 @@
-import {enableProdMode} from '@angular/core';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+// import './bootstrap';
+import { loadRemoteEntry } from '@angular-architects/module-federation';
 
-import {AppModule} from './app/app.module';
-import {environment} from './environments/environment';
+// fetch('/api/registry/all-remotes')
 
-if (environment.production) {
-  enableProdMode();
-}
+Promise.all([
+	loadRemoteEntry('http://localhost:3000/remoteEntry.js', 'passenger'),
+	loadRemoteEntry('http://localhost:3000/remoteEntry.js', 'passenger'),
+	loadRemoteEntry('http://localhost:3000/remoteEntry.js', 'passenger'),
 
-platformBrowserDynamic().bootstrapModule(AppModule);
-
-
-
-
-
+])
+	.catch(err => console.error(err))
+	.then(_ => import('./bootstrap'))
+	.catch(err => console.error(err));
 
