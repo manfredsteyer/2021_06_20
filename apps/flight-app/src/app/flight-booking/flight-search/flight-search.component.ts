@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Flight } from '@flight-workspace/flight-lib';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { delayFirstFlight, loadFlights } from '../+state/actions';
-import { selectFlights } from '../+state/selectors';
+import { selectFlights, selectSearchParams } from '../+state/selectors';
+import { SearchParams } from '../search-params';
 
 @Component({
   selector: 'flight-search',
@@ -13,9 +15,8 @@ import { selectFlights } from '../+state/selectors';
   styleUrls: ['./flight-search.component.css']
 })
 export class FlightSearchComponent implements OnInit {
+  searchParams$: Observable<SearchParams> = this.store.select(selectSearchParams);
 
-  from = 'Hamburg'; // in Germany
-  to = 'Graz'; // in Austria
   urgent = false;
   // "shopping basket" with selected flights
   basket: { [id: number]: boolean } = {
@@ -25,21 +26,16 @@ export class FlightSearchComponent implements OnInit {
   flights$: Observable<Flight[]>;
 
   constructor(
-    private store: Store) {
+    private store: Store, private fb: FormBuilder) {
   }
 
   ngOnInit() {
     this.flights$ = this.store.select(selectFlights);
   }
 
-  search(): void {
-    if (!this.from || !this.to) return;
-
-    this.store.dispatch(loadFlights({
-      from: this.from,
-      to: this.to,
-      urgent: this.urgent
-    }));
+  search(searchParams: SearchParams): void {
+    this.store.dispatch(loadFlights({ searchParams }))
+    ;
   }
 
   delay(): void {

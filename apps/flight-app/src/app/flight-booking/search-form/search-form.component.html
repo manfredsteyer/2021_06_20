@@ -1,0 +1,30 @@
+<div class='content'>
+
+  <form (ngSubmit)='handleSubmit()' [formGroup]='formGroup'>
+
+    <div class='form-group'>
+      <label>From:</label>
+      <input class='form-control' formControlName='from'>
+    </div>
+    <div class='form-group'>
+      <label>To:</label>
+      <input class='form-control' formControlName='to'>
+    </div>
+    <div class='form-group'>
+      <label>
+        <input formControlName='urgent' type='checkbox'>
+        Urgent (When it's urgent it fails -- like in real life ;-))
+
+      </label>
+    </div>
+
+    <div class='form-group'>
+      <button
+        class='btn btn-default'>
+        Search
+      </button>
+
+    </div>
+  </form>
+
+</div>

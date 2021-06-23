@@ -10,7 +10,7 @@ import { flightsLoaded, loadFlights } from './actions';
 export class FlightBookingEffects {
   loadFlights$ = createEffect(() => this.actions$.pipe(
     ofType(loadFlights),
-    switchMap(action => this.flightService.find(action.from, action.to, action.urgent).pipe(
+    switchMap(({ searchParams }) => this.flightService.find(searchParams.from, searchParams.to, searchParams.urgent).pipe(
       catchError(() => of([])))),
     map(flights => flightsLoaded({ flights }))
   ));
