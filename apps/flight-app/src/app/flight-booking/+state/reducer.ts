@@ -1,9 +1,14 @@
+import { Flight } from '@flight-workspace/flight-lib';
 import { createReducer } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 import { delayFirstFlight, flightsLoaded } from './actions';
 
+export interface FlightBookingState {
+  flights: Flight[];
+}
 
-export const reducer = createReducer({
+export const featureKey = 'flightBooking';
+export const reducer = createReducer<FlightBookingState>({
   flights: []
 }, immerOn(flightsLoaded, (state, action) => {
   state.flights = action.flights;

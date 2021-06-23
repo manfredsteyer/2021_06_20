@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, OnInit } from '@angular/core';
-import { Flight, FlightService } from '@flight-workspace/flight-lib';
+import { Flight } from '@flight-workspace/flight-lib';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { delayFirstFlight, flightsLoaded } from '../+state/actions';
+import { delayFirstFlight, loadFlights } from '../+state/actions';
+import { selectFlights } from '../+state/selectors';
 
 @Component({
   selector: 'flight-search',
@@ -24,18 +25,21 @@ export class FlightSearchComponent implements OnInit {
   flights$: Observable<Flight[]>;
 
   constructor(
-    private flightService: FlightService, private store: Store<any>) {
+    private store: Store) {
   }
 
   ngOnInit() {
-    this.flights$ = this.store.select(tree => tree.flightBooking.flights);
+    this.flights$ = this.store.select(selectFlights);
   }
 
   search(): void {
     if (!this.from || !this.to) return;
 
-    this.flightService
-      .find(this.from, this.to, this.urgent).subscribe(flights => this.store.dispatch(flightsLoaded({ flights })));
+    this.store.dispatch(loadFlights({
+      from: this.from,
+      to: this.to,
+      urgent: this.urgent
+    }));
   }
 
   delay(): void {
